@@ -8,23 +8,22 @@
 :root {
   --heading-font-family: "RBCDisplay", "Roboto", "Helvetica Neue", arial, sans-serif;
   --body-font-family: "Roboto", "Helvetica Neue", arial, sans-serif;
-
   --background-color: rgb(255 255 255);
   --text-color: rgb(37 37 37);
   --link-color: rgb(0 106 195);
   --link-hover-color: rgb(35 82 124);
 
-  /* section variants */
+  /* boilerplate section variants use --light-color */
+  --light-color: rgb(237 247 252);
+  --dark-color: rgb(0 81 165);
   --section-light-bg: rgb(237 247 252);
-
   --section-padding: 48px;
-  --nav-height: 30px;
 
-  /* heading sizes (desktop) */
-  --heading-size-xxl: 40px;
-  --heading-size-xl: 36px;
-  --heading-size-l: 24px;
-  --heading-size-m: 24px;
-  --heading-size-s: 18px;
-  --heading-size-xs: 16px;
+  /* heading sizes (desktop) — mapped onto boilerplate --heading-font-size-* */
+  --heading-font-size-xxl: 40px;
+  --heading-font-size-xl: 36px;
+  --heading-font-size-l: 24px;
+  --heading-font-size-m: 24px;
+  --heading-font-size-s: 18px;
+  --heading-font-size-xs: 16px;
 }

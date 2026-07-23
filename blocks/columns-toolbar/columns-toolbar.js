@@ -24,7 +24,7 @@ export default function decorate(block) {
     const select = document.createElement('span');
     select.className = 'columns-toolbar-select';
     if (match) {
-      label.textContent = match[1];
+      [, label.textContent] = match;
       select.textContent = match[2] || '';
     } else {
       label.textContent = 'Sort by:';

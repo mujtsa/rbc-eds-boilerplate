@@ -15,28 +15,37 @@ An **AEM Edge Delivery Services (EDS)** site that hosts a migration of the RBC R
 
 | Thing | Value |
 |-------|-------|
-| GitHub repo | `github.com/mujtsa/rbc-eds-demo` |
-| DA org / repo | `mujtsa` / `rbc-eds-demo` |
+| GitHub repo (code) | `github.com/mujtsa/rbc-eds-boilerplate` |
+| DA org / repo (content) | `mujtsa` / `rbc-eds-demo` |
 | Content source | `https://content.da.live/mujtsa/rbc-eds-demo/` (see `fstab.yaml`) |
-| Preview host | `https://main--rbc-eds-demo--mujtsa.aem.page/{path}` |
-| Live host | `https://main--rbc-eds-demo--mujtsa.aem.live/{path}` |
+| Preview host | `https://main--rbc-eds-boilerplate--mujtsa.aem.page/{path}` |
+| Live host | `https://main--rbc-eds-boilerplate--mujtsa.aem.live/{path}` |
 | Edit in DA | `https://da.live/edit#/mujtsa/rbc-eds-demo/{path}` |
 | Migrated page | `/credit-cards/all-credit-cards-p` |
 
-> **Note:** an earlier `smujtaba677` org was abandoned — the Adobe/GitHub account has access to
-> **`mujtsa`**, not `smujtaba677`. Always use `mujtsa`.
+> **Notes:**
+> - Code and content are split: code lives in `mujtsa/rbc-eds-boilerplate`, content stays in DA at
+>   `mujtsa/rbc-eds-demo`. `fstab.yaml` mounts the DA content into the code site.
+> - An earlier `smujtaba677` org was abandoned; the Adobe/GitHub account has access to **`mujtsa`**.
+> - An earlier `mujtsa/rbc-eds-demo` **code** repo used the AuthorKit scaffold; the project was
+>   migrated to the standard **AEM Boilerplate** and now lives in `mujtsa/rbc-eds-boilerplate`.
 
-## Runtime — this is AuthorKit, NOT vanilla EDS
+## Runtime — standard AEM Boilerplate
 
-This scaffold uses the **AuthorKit runtime** (`scripts/ak.js`), **not** the standard
-`aem.js` boilerplate. Consequences for block code:
+This is the standard **AEM Boilerplate** (`adobe/aem-boilerplate`): runtime is `scripts/aem.js` +
+`scripts/scripts.js`, `head.html` loads both with the `nonce="aem"` CSP. (It was previously the
+AuthorKit `scripts/ak.js` scaffold — fully converted.)
 
-- There is **no `scripts/aem.js`**. Do NOT `import { createOptimizedPicture } from '../../scripts/aem.js'`
-  or `moveInstrumentation` — those modules 404 and the block silently fails to decorate.
-- Write blocks as an import-free `export default function decorate(block) { ... }` (or `init(el)` for
-  header/footer) that manipulate the DOM directly. See the existing blocks for the pattern.
-- `buildAutoBlocks` / picture decoration lives in `scripts/ak.js` (`decoratePictures`). A defensive
-  guard was added there for `<picture>` without `<source>`.
+- Blocks export `export default function decorate(block) { ... }` and may import helpers from
+  `../../scripts/aem.js` (e.g. `getMetadata`, `createOptimizedPicture`, `loadFragment`).
+- The 4 RBC block variants happen to be written import-free (plain DOM manipulation) — that's fine and
+  boilerplate-compatible; they don't need `aem.js`.
+- `scripts/scripts.js` runs `decorateMain` (icons, auto-blocks incl. `/fragments/` + `/widgets/`,
+  sections, blocks, buttons) then `loadEager`/`loadLazy`/`loadDelayed`. `loadHeader`/`loadFooter`
+  build `.header`/`.footer` blocks inside `<header>`/`<footer>`.
+- Lint: `npm run lint` (eslint airbnb-base via `.eslintrc.js` + stylelint-config-standard). We set
+  `no-descending-specificity: null` in `.stylelintrc.json` (matches boilerplate intent under the
+  newer stylelint).
 
 ## Blocks (new variants created for this migration)
 

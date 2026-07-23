@@ -1,21 +1,20 @@
-import { getConfig, getMetadata } from '../../scripts/ak.js';
-
-const { locale } = getConfig();
+import { getMetadata } from '../../scripts/aem.js';
 
 const HEADER_PATH = '/fragments/nav/header';
 
 async function fetchFragment(path) {
-  // Local preview / aem up serves content under /content; production DA/EDS serves at root.
-  let resp = await fetch(`/content${path}.plain.html`);
-  if (!resp.ok) resp = await fetch(`${path}.plain.html`);
+  // aem up / EDS serves content at root; local preview also serves under /content.
+  let resp = await fetch(`${path}.plain.html`);
+  if (!resp.ok) resp = await fetch(`/content${path}.plain.html`);
   if (!resp.ok) resp = await fetch(path);
   if (!resp.ok) throw Error(`Couldn't fetch ${path}`);
   const html = await resp.text();
   const doc = new DOMParser().parseFromString(html, 'text/html');
-  // Resolve relative fragment image paths against the fragment's directory.
-  const dir = `/content${path}`.replace(/\/[^/]*$/, '/');
-  doc.querySelectorAll('img[src^="./"]').forEach((img) => {
-    img.src = new URL(img.getAttribute('src'), new URL(dir, window.location)).href;
+  // Resolve relative fragment media/image paths against the fragment's directory.
+  const dir = path.replace(/\/[^/]*$/, '/');
+  doc.querySelectorAll('img[src^="./"], source[srcset^="./"]').forEach((el) => {
+    const attr = el.tagName === 'SOURCE' ? 'srcset' : 'src';
+    el[attr] = new URL(el.getAttribute(attr), new URL(dir, window.location)).href;
   });
   // Fragment .plain.html places sections directly under <body> (no <main>).
   const sections = doc.body.querySelectorAll(':scope > div');
@@ -40,10 +39,10 @@ function decorateDropdown(li, root) {
   });
 }
 
-export default async function init(el) {
+export default async function decorate(el) {
   const headerMeta = getMetadata('header');
-  const path = headerMeta || HEADER_PATH;
-  const sections = await fetchFragment(`${locale.prefix}${path}`);
+  const path = headerMeta ? new URL(headerMeta, window.location).pathname : HEADER_PATH;
+  const sections = await fetchFragment(path);
 
   const nav = document.createElement('nav');
   nav.className = 'rbc-header';

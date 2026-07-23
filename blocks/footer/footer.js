@@ -1,12 +1,10 @@
-import { getConfig, getMetadata } from '../../scripts/ak.js';
-
-const { locale } = getConfig();
+import { getMetadata } from '../../scripts/aem.js';
 
 const FOOTER_PATH = '/fragments/nav/footer';
 
 async function fetchFragment(path) {
-  let resp = await fetch(`/content${path}.plain.html`);
-  if (!resp.ok) resp = await fetch(`${path}.plain.html`);
+  let resp = await fetch(`${path}.plain.html`);
+  if (!resp.ok) resp = await fetch(`/content${path}.plain.html`);
   if (!resp.ok) resp = await fetch(path);
   if (!resp.ok) throw Error(`Couldn't fetch ${path}`);
   const html = await resp.text();
@@ -16,10 +14,10 @@ async function fetchFragment(path) {
   return sections.length ? sections : doc.body.querySelectorAll('main > div');
 }
 
-export default async function init(el) {
+export default async function decorate(el) {
   const footerMeta = getMetadata('footer');
-  const path = footerMeta || FOOTER_PATH;
-  const sections = await fetchFragment(`${locale.prefix}${path}`);
+  const path = footerMeta ? new URL(footerMeta, window.location).pathname : FOOTER_PATH;
+  const sections = await fetchFragment(path);
 
   const inner = document.createElement('div');
   inner.className = 'rbc-footer';
