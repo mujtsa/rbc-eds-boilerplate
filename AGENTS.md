@@ -16,19 +16,20 @@ An **AEM Edge Delivery Services (EDS)** site that hosts a migration of the RBC R
 | Thing | Value |
 |-------|-------|
 | GitHub repo (code) | `github.com/mujtsa/rbc-eds-boilerplate` |
-| DA org / repo (content) | `mujtsa` / `rbc-eds-demo` |
-| Content source | `https://content.da.live/mujtsa/rbc-eds-demo/` (see `fstab.yaml`) |
+| DA org / repo (content) | `mujtsa` / `rbc-eds-boilerplate` |
+| Content source | `https://content.da.live/mujtsa/rbc-eds-boilerplate/` (see `fstab.yaml`) |
 | Preview host | `https://main--rbc-eds-boilerplate--mujtsa.aem.page/{path}` |
 | Live host | `https://main--rbc-eds-boilerplate--mujtsa.aem.live/{path}` |
-| Edit in DA | `https://da.live/edit#/mujtsa/rbc-eds-demo/{path}` |
+| Edit in DA | `https://da.live/edit#/mujtsa/rbc-eds-boilerplate/{path}` |
 | Migrated page | `/credit-cards/all-credit-cards-p` |
 
 > **Notes:**
-> - Code and content are split: code lives in `mujtsa/rbc-eds-boilerplate`, content stays in DA at
->   `mujtsa/rbc-eds-demo`. `fstab.yaml` mounts the DA content into the code site.
+> - Code, content (DA), and EDS site all share the name **`rbc-eds-boilerplate`** under org `mujtsa`
+>   (self-contained; `fstab.yaml` mounts `content.da.live/mujtsa/rbc-eds-boilerplate`).
 > - An earlier `smujtaba677` org was abandoned; the Adobe/GitHub account has access to **`mujtsa`**.
-> - An earlier `mujtsa/rbc-eds-demo` **code** repo used the AuthorKit scaffold; the project was
->   migrated to the standard **AEM Boilerplate** and now lives in `mujtsa/rbc-eds-boilerplate`.
+> - History: the project started on the AuthorKit scaffold at `mujtsa/rbc-eds-demo` (content was first
+>   published there). It was migrated to the standard **AEM Boilerplate** in `mujtsa/rbc-eds-boilerplate`,
+>   and the content was copied into the matching DA space `mujtsa/rbc-eds-boilerplate`.
 
 ## Runtime — standard AEM Boilerplate
 
